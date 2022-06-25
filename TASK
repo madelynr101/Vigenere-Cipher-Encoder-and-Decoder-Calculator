@@ -1,0 +1,78 @@
+# Programmer: Madelyn Weathers 
+# Description: To take a cipher text or plaintext and use a known key of any length to either encode or decode the 
+               # Vigenere Cipher message. 
+
+def main():
+    print("Hello to Vigenere Cipher decryption and encryption calculator!\n")
+    print("Would you like to decrypt or encrypt your current message? (You must have a key to use this service!)\n")
+    while True:
+        try: 
+            choice = input("Encrypt: E or Decrypt: D (enter D or E to continue, and Y to Exit the program):\n").upper()
+        except choice != "E" or choice != "D" or choice != "Y": 
+            continue 
+        if choice == "Y":
+            quit()
+        if choice == "D":
+            decrypt()
+        if choice == "E":
+            encrypt()
+        break 
+    print("THANK YOU FOR USING THIS CALCULATOR! COME AGAIN!")
+
+
+def encrypt():
+    print("WELCOME TO THE ENCRYPTION CALCULATOR\n")
+    str1 = input("Input plaintext (no characters will be kept besides a-z, including spaces!)\n").lower()
+    plaintext = "".join([ch for ch in str1 if ch.isalpha()])
+    inputkey = input("Input your key\n")
+    # get length of key to be of length plaintext
+    if len(inputkey) > len(plaintext):
+        key = len(plaintext)
+        key = inputkey[:key] 
+    elif len(inputkey) < len(plaintext): 
+        key = inputkey*len(plaintext)
+    print("key: ", key)
+    # convert letter to number for plaintext and key
+    ptNum = [ord(x) - 97 for x in plaintext]
+    keyNum = [ord(x) - 97 for x in key]
+    # get their difference and mod
+    difference = []
+    zip_object = zip(ptNum, keyNum)
+    for ptNum_i, keyNum_j in zip_object:
+        difference.append((ptNum_i+keyNum_j) % 26)
+    # get encrypted message 
+    message = [chr(difference[i] + 97) for i in range(0, len(difference))]
+    strmessage = ""
+    print("message: ", strmessage.join(message))
+
+
+
+
+def decrypt():
+    print("WELCOME TO THE DECRYPTION CALCULATOR!\n")
+    str1 = input("Input ciphertext (no characters will be kept besides a-z, including spaces!)\n").lower()
+    ciphertext = "".join([ch for ch in str1 if ch.isalpha()])
+    inputkey = input("Input your key\n")
+    # get key to be of length ciphertext
+    if len(inputkey) > len(ciphertext):
+        key = len(ciphertext)
+        key = inputkey[:key] 
+    elif len(inputkey) < len(ciphertext): 
+        key = inputkey*len(ciphertext)
+    print("key: ", key)
+    # convert letter to number for ciphertext and key
+    ctNum = [ord(x) - 97 for x in ciphertext]
+    keyNum = [ord(x) - 97 for x in key]
+    # get their difference and mod
+    difference = []
+    zip_object = zip(ctNum, keyNum)
+    for ctNum_i, keyNum_j in zip_object:
+        difference.append((ctNum_i-keyNum_j) % 26)
+    # get encrypted message 
+    message = [chr(difference[i] + 97) for i in range(0, len(difference))]
+    strmessage = ""
+    print("message: ", strmessage.join(message))
+
+
+if __name__ == "__main__":
+    main()
