@@ -8,8 +8,8 @@ def main():
     while True: 
         while True:
             try: 
-                choice = input("Encrypt: E or Decrypt: D (enter D or E to continue, and Y to Exit the program):\n").upper()
-            except choice != "E" or choice != "D" or choice != "Y": 
+                choice = input("Encrypt: E or Decrypt: D or to find key: K (enter D, E, or K to continue, and Y to Exit the program):\n").upper()
+            except choice != "E" or choice != "D" or choice != "K" or choice != "Y": 
                 continue 
             if choice == "Y":
                 quit()
@@ -17,6 +17,8 @@ def main():
                 decrypt()
             if choice == "E":
                 encrypt()
+            if choice == "K":
+                key()
             break 
         choice2 = input("Would you like to continue using this calculator? (enter 'c' to coninue, any other character to exit\n").upper()
         if choice2 != "C":
@@ -52,8 +54,6 @@ def encrypt():
     print("message: ", strmessage.join(message))
 
 
-
-
 def decrypt():
     print("WELCOME TO THE DECRYPTION CALCULATOR!\n")
     str1 = input("Input ciphertext (no characters will be kept besides a-z, including spaces!)\n").lower()
@@ -78,6 +78,25 @@ def decrypt():
     message = [chr(difference[i] + 97) for i in range(0, len(difference))]
     strmessage = ""
     print("message: ", strmessage.join(message))
+
+def key():
+    print("WELCOME TO THEY KEY FINDER!\n")
+    # get ciphertext from user 
+    str1 = input("Input your ciphertext\n").lower()
+    ciphertext = "".join([ch for ch in str1 if ch.isalpha()])
+    str2 = input("Input what you know from your plaintext\n").lower()
+    plaintext = "".join([ch for ch in str2 if ch.isalpha()])
+    # get int maximum key length 
+    while True:
+        max_key_user_input = input("what is the maximum size of your key? (include an int)\n")
+        if max_key_user_input.isdigit(): 
+            break 
+        else: 
+            continue
+    
+    
+        
+
 
 
 if __name__ == "__main__":
