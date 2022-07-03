@@ -2,6 +2,9 @@
 # Description: To take a cipher text or plaintext and use a known key of any length to either encode or decode the 
                # Vigenere Cipher message. 
 
+from itertools import product
+from string import ascii_lowercase
+
 def main():
     print("Hello to Vigenere Cipher decryption and encryption calculator!\n")
     print("Would you like to decrypt or encrypt your current message? (You must have a key to use this service!)\n")
@@ -20,12 +23,12 @@ def main():
             if choice == "K":
                 key()
             break 
-        choice2 = input("Would you like to continue using this calculator? (enter 'c' to coninue, any other character to exit\n").upper()
+        choice2 = input("Would you like to continue using this calculator? (enter 'c' to coninue, any other character to exit)\n").upper()
         if choice2 != "C":
+            print("THANK YOU FOR USING THIS CALCULATOR! COME AGAIN!")
             quit()
         else:
             continue
-    print("THANK YOU FOR USING THIS CALCULATOR! COME AGAIN!")
 
 
 def encrypt():
@@ -53,6 +56,16 @@ def encrypt():
     strmessage = ""
     print("message: ", strmessage.join(message))
 
+def decrypt_math(ciphertext, key):
+    # convert letter to number for ciphertext and key
+    ctNum = [ord(x) - 97 for x in ciphertext]
+    keyNum = [ord(x) - 97 for x in key]
+    # get their difference and mod
+    difference = []
+    zip_object = zip(ctNum, keyNum)
+    for ctNum_i, keyNum_j in zip_object:
+        difference.append((ctNum_i-keyNum_j) % 26)
+    return difference
 
 def decrypt():
     print("WELCOME TO THE DECRYPTION CALCULATOR!\n")
@@ -66,15 +79,8 @@ def decrypt():
     elif len(inputkey) < len(ciphertext): 
         key = inputkey*len(ciphertext)
     print("key: ", key)
-    # convert letter to number for ciphertext and key
-    ctNum = [ord(x) - 97 for x in ciphertext]
-    keyNum = [ord(x) - 97 for x in key]
-    # get their difference and mod
-    difference = []
-    zip_object = zip(ctNum, keyNum)
-    for ctNum_i, keyNum_j in zip_object:
-        difference.append((ctNum_i-keyNum_j) % 26)
-    # get encrypted message 
+    difference = decrypt_math(ciphertext, key)
+    # get decrypted message 
     message = [chr(difference[i] + 97) for i in range(0, len(difference))]
     strmessage = ""
     print("message: ", strmessage.join(message))
@@ -84,6 +90,7 @@ def key():
     # get ciphertext from user 
     str1 = input("Input your ciphertext\n").lower()
     ciphertext = "".join([ch for ch in str1 if ch.isalpha()])
+    # get part of plaintext
     str2 = input("Input what you know from your plaintext\n").lower()
     plaintext = "".join([ch for ch in str2 if ch.isalpha()])
     # get int maximum key length 
@@ -93,6 +100,29 @@ def key():
             break 
         else: 
             continue
+    # input validate that input is int, then statically cast as int so code doesnt break
+    max_key_user_input = int(max_key_user_input)
+    # start deciphering starting at a until z, and ending where user wants (ex: aa-zz, aaa-zzz, etc.)
+    size = 1 
+    key = []
+    while True:
+        keyword = [''.join(i) for i in product(ascii_lowercase, repeat = size)]
+        print("Your key is: ", keyword)
+        keep_going = input("Would you like to keep going? (Input 'Y' for yes, any other character for no.)\n")
+        if keep_going == "Y":
+            size+=1 
+            continue
+        else:
+            break 
+    for x in range(len(keyword)):
+        # if len(keyword[x]) > max_key_user_input:
+        #     key = max_key_user_input
+        #     key = keyword[x][:key] 
+        if len(keyword[x]) < max_key_user_input: 
+            key = keyword[x]*max_key_user_input
+    print("key: ", key)
+    
+
     
     
         
