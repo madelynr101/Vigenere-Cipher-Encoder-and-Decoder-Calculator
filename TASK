@@ -4,7 +4,6 @@
 
 from itertools import product
 from string import ascii_lowercase
-from typing import final
 
 def main():
     print("Hello to Vigenere Cipher decryption and encryption calculator!\n")
@@ -96,37 +95,41 @@ def key():
     max_key_user_input = int(max_key_user_input)
     # start deciphering starting at a until z, and ending where user wants (ex: aa-zz, aaa-zzz, etc.)
     size = 1 
-    key = []
+    count = 1
     while True:
         keyword = ["".join(i) for i in product(ascii_lowercase, repeat = size)]
-        print("Your possible keys are: ", keyword)
-        keep_going = input("Would you like to keep going? (Input 'Y' for yes, any other character for no.)\n")
-        if keep_going == "Y":
+        found = decipher_key(keyword, ciphertext, plaintext)
+        if found == False:
+            print(plaintext, " was not found in the plaintext. Try again. \n")
+        if count < max_key_user_input:
+            keep_going = input("Would you like to keep going? (Input 'Y' for yes, any other character for no.)\n").upper()
+        if keep_going == "Y" and count < max_key_user_input:
             size+=1 
-            decipher_key(keyword, ciphertext, plaintext)
+            found = decipher_key(keyword, ciphertext, plaintext)
+            count += 1
             continue
         else:
-            decipher_key(keyword, ciphertext, plaintext)
             break 
+
 
 # PURPOSE: Finds the list for all combinations of keys of the length of the ciphertext.
 # REUTRNS: None. 
 def decipher_key(keyword, ciphertext, plaintext):
     i = 0
-    index = 0 
     key_attempts = []
     key = ""
+    found = False
     for x in range(len(keyword)):
         key_attempts.append(keyword[x+i]*len(ciphertext))
-    print("New possible keys: ", key_attempts)
     for y in range(len(key_attempts)):
         key = key_attempts[y+i]
-        print("key: ", key)
         strmessage = math_def_key(ciphertext, key)
-    if plaintext in strmessage:
-        print(strmessage)
-    else:
-         print("no possible keys found. Try again.\n")
+        if plaintext in strmessage:
+            print("A possible message was found! \n")
+            print("key: ", key, "\n")
+            print("message: ", strmessage, "\n")
+            found = True 
+    return found 
 
 # PURPOSE: Takes decrypt_math() and makes a list of strings, message, that outputs the final decoded message aka the plaintext. 
 # REUTRNS: a string  
